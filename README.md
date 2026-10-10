@@ -44,7 +44,7 @@ Los dos primeros comandos compilan el correspondiente código fuente, generando 
 
 Estudie cuidadosamente las explicaciones de ese tutorial. En el directorio puede hallar las 5 versiones del fichero `Makefile` que se estudian en ese tutorial. Para utilizar cualquiera de ellos (por ejemplo, el fichero `makefile.2`) ejecute el comando
 ``` .bash
-make -f Makefile.2
+make -f makefile.2
 ```
 Recuerde que para que `make` utilice el fichero por defecto, éste ha de llamarse `Makefile`, en cuyo caso basta con ejecutar
 ``` .bash
@@ -56,28 +56,36 @@ Para finalizar, en [el directorio principal del repositorio de esta práctica](h
 - Tenga en cuenta que el formato del fichero `Makefile` requiere que en algunos puntos del mismo haya un caracter tabulador (*tab*, `\t`) y no acepta espacios en su lugar. Tal es el caso en las líneas 33, 47 y 55.
 - La línea 25 es la que especifica el nombre del fichero ejecutable que ha de construir `make`, que en este caso es `digits`.
 - Se indica en la línea 32 que el fichero `digits` depende del código objeto `digits.o`. La línea 33 indica cómo *construir* el fichero `digits` a partir de `digits.o`, invocando al enlazador (*linker*) con una línea como:
+    
     ``` .bash
     g++ -std=c++17 -Wall -o digits digits.o
     ```
 - Las líneas 46 y 47 indican cómo construir los códigos objeto (`.o`) a partir de su correspondientes códigos fuente (`.cc`):
+    
     ``` .bash
     g++ -std=c++17 -Wall -c -o digits.o digits.cc
     ```
-    Esta línea invoca al compilador con la opción `-c` (solo compilar, sin enlazar) para producir el código objeto (`digits.o`) a partir del fichero fuente (`digits.cc`). Observe que ese comando es el primero que se ejecuta al invocar a `make` (`all` depende de `digits`, que depende de `digits.o`).  
+    Esta línea invoca al compilador con la opción `-c` (solo compilar, sin enlazar) para producir el código objeto (`digits.o`) a partir del fichero fuente (`digits.cc`). Observe que ese comando es el primero que se ejecuta al invocar a `make` (`all` depende de `digits`, que depende de `digits.o`).
+    
     Sin embargo, como indica el comentario, esa regla no necesita especificarse explícitamente, porque `make` ya la contempla por defecto. Pruebe a comentar ambas líneas con `#` y observará que la compilación aún se realiza correctamente.
 - Por último, observe que los comandos que figuran después de la línea 54 se ejecutan al invocar:
+    
     ``` .bash
     make clean
     ```
     Se puede utilizar cualquier otra etiqueta, pero la costumbre es utilizar la etiqueta `clean`. La finalidad de estos comandos (que puede Ud. configurar a su gusto) es borrar todos aquellos ficheros que, siendo producto de la compilación/edición del proyecto, no se desea retener. Así por ejemplo los ficheros `*.o` con código objeto o el fichero ejecutable (`digits` en este caso) no conviene conservarlos, puesto que ocupan espacio y, como se pueden obtener a partir del codigo fuente, no son necesarios.
 
 Estudie detenidamente este fichero `Makefile`. Puede reutilizar éste o cualquier otro de los que haya generado para proyectos futuros, sustituyendo el nombre del programa a generar y de los códigos fuente y objeto por los que correspondan a cada ejercicio. Pruebe a crear una cuarta variable que indique el nombre del programa, de forma que sea más sencillo hacer dicha sustitución con cada reutilización del fichero. Por ejemplo:
+
 ``` .bash
+CXX = g++
+CXXFLAGS = -std=c++17 -Wall
+LDFLAGS =
 PROG = digits
 
 all: $(PROG)
 
-$(PROG): $(PROG).o 
+$(PROG): $(PROG).o 
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
  
 .PHONY: all clean
@@ -89,6 +97,7 @@ Tenga en cuenta que el fichero `Makefile` será más complejo una vez comencemos
 
 ### Alternativas e iteraciones
 Para el desarrollo de esta práctica será necesario saber programar sentencias condicionales e iterativas en C++. Recuerde que, a grandes rasgos, su funcionamiento es el siguiente:
+
 ``` c++
 if (condición) {
   sentencias_1;
@@ -105,7 +114,7 @@ while (condición) {
 }
 ```
 
-En el bloque `if-else` anterior, si la `condición` booleana se cumple, se ejecutará `sentencias_1`; si no se cumple, se ejecutará `sentencias_2`. Si `sentencias_2` estuviera vacío, no es necesario escribir el bloque `else`. 
+En el bloque `if-else` anterior, si la `condición` booleana se cumple, se ejecutará `sentencias_1`; si no se cumple, se ejecutará `sentencias_2`. Si `sentencias_2` estuviera vacío, no sería necesario escribir el bloque `else`. 
 
 En un bucle `for` se puede especificar una sentencia de `inicio` que puede incluir declaraciones de variables, una `condición` booleana que deberá cumplirse para que el bucle continúe en ejecución, y una sentencia de `incremento` que se ejecutará después de cada iteración del bloque de `sentencias`. En resumen, en un bucle `for` se ejecutará primero la sentencia de `inicio` y luego, mientras que la `condición` sea *verdadera*, se ejecutará repetidamente (iterativamente) el bloque de `sentencias` y el `incremento`.
 
