@@ -1,0 +1,10 @@
+CXX=gcc
+CXXFLAGS=-I.
+DEPS = hellomake.h
+OBJ = hellomake.o hellofunc.o 
+
+%.o: %.c $(DEPS)
+	$(CXX) -c -o $@ $< $(CXXFLAGS)
+
+hellomake: $(OBJ)
+	$(CXX) -o $@ $^ $(CXXFLAGS)

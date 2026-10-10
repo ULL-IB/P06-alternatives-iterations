@@ -1,0 +1,5 @@
+CXX=gcc
+CXXFLAGS=-I.
+
+hellomake: hellomake.o hellofunc.o 
+	$(CXX) -o hellomake hellomake.o hellofunc.o
