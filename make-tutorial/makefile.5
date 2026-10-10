@@ -1,5 +1,5 @@
 IDIR=../include
-CXX=gcc
+CXX=g++
 CXXFLAGS=-I$(IDIR)
 
 ODIR=obj
@@ -11,8 +11,20 @@ DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 _OBJ = hellomake.o hellofunc.o 
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
+# Para usar este Makefile, se necesita
+# la siguiente estructura de directorios:
+#
+# P06-alternatives-iterations
+# |- include/
+# |  '- hellomake.h
+# |- make-tutorial/
+# :  |- obj/
+#    |- hellomake.cc
+#    |- hellofunc.cc
+#    :
+#    '- makefile.5
 
-$(ODIR)/%.o: %.c $(DEPS)
+$(ODIR)/%.o: %.cc $(DEPS)
 	$(CXX) -c -o $@ $< $(CXXFLAGS)
 
 hellomake: $(OBJ)

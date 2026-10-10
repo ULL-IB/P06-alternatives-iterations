@@ -1,8 +1,8 @@
-CXX=gcc
+CXX=g++
 CXXFLAGS=-I.
 DEPS = hellomake.h
 
-%.o: %.c $(DEPS)
+%.o: %.cc $(DEPS)
 	$(CXX) -c -o $@ $< $(CXXFLAGS)
 
 hellomake: hellomake.o hellofunc.o 
